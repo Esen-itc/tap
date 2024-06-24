@@ -14,25 +14,20 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
+            overflow: hidden;
         }
 
         .container {
             text-align: center;
-            width: 300px;
+            width: 100%;
+            height: 100%;
             padding: 20px;
             background: #3b3b98;
-            border-radius: 10px;
-        }
-
-        .header {
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
+            justify-content: center;
             align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .main {
-            margin-top: 20px;
+            border-radius: 10px;
         }
 
         .balance {
@@ -44,6 +39,12 @@
 
         .coin {
             margin-right: 10px;
+            cursor: pointer;
+            transition: transform 0.1s ease;
+        }
+
+        .coin:active {
+            transform: scale(0.9);
         }
 
         .bronze {
@@ -53,6 +54,12 @@
         .coin-icon {
             font-size: 100px;
             margin: 20px 0;
+            cursor: pointer;
+            transition: transform 0.1s ease;
+        }
+
+        .coin-icon:active {
+            transform: scale(0.9);
         }
 
         .progress-bar {
@@ -61,6 +68,7 @@
             overflow: hidden;
             position: relative;
             height: 20px;
+            width: 80%;
             margin: 20px 0;
         }
 
@@ -79,6 +87,7 @@
         .buttons {
             display: flex;
             justify-content: space-around;
+            width: 80%;
         }
 
         .button {
@@ -88,66 +97,71 @@
             padding: 10px;
             border-radius: 5px;
             cursor: pointer;
+            flex-grow: 1;
+            margin: 0 5px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <div class="time">22:54</div>
-            <div class="telegram">Telegram</div>
-            <div class="signal">4G</div>
+        <div class="balance">
+            <span class="coin">🪙</span>
+            <span id="balance">0</span>
+            <span class="bronze">Bronze</span>
         </div>
-        <div class="main">
-            <div class="balance">
-                <span class="coin">🪙</span>
-                <span id="balance">0</span>
-                <span class="bronze">Bronze</span>
-            </div>
-            <div class="coin-icon">🪙</div>
-            <div class="progress-bar">
-                <div class="progress" id="progress" style="width: 0;"></div>
-                <div class="energy">441/500</div>
-            </div>
-            <div class="buttons">
-                <button class="button" id="ref">Ref</button>
-                <button class="button" id="task">Task</button>
-                <button class="button" id="tap">Tap</button>
-                <button class="button" id="boost">Boost</button>
-                <button class="button" id="stats">Stats</button>
-            </div>
+        <div class="coin-icon" id="coin-icon">🪙</div>
+        <div class="progress-bar">
+            <div class="progress" id="progress" style="width: 0;"></div>
+            <div class="energy" id="energy">500/500</div>
+        </div>
+        <div class="buttons">
+            <button class="button" id="ref">Ref</button>
+            <button class="button" id="task">Task</button>
+            <button class="button" id="tap">Tap</button>
+            <button class="button" id="boost">Boost</button>
+            <button class="button" id="stats">Stats</button>
         </div>
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const balanceElement = document.getElementById('balance');
             const progressElement = document.getElementById('progress');
+            const energyElement = document.getElementById('energy');
+            const coinIcon = document.getElementById('coin-icon');
 
             // Initialize balance and progress from localStorage if available
             let balance = localStorage.getItem('balance') ? parseInt(localStorage.getItem('balance')) : 0;
-            let progress = localStorage.getItem('progress') ? parseInt(localStorage.getItem('progress')) : 0;
+            let progress = localStorage.getItem('progress') ? parseInt(localStorage.getItem('progress')) : 500;
 
             balanceElement.innerText = balance;
             progressElement.style.width = `${progress / 500 * 100}%`;
+            energyElement.innerText = `${progress}/500`;
 
-            document.getElementById('tap').addEventListener('click', () => {
-                balance += 1;
-                progress += 1;
+            coinIcon.addEventListener('click', () => {
+                if (progress > 0) {
+                    balance += 1;
+                    progress -= 1;
 
-                if (progress > 500) {
-                    progress = 0;
+                    balanceElement.innerText = balance;
+                    progressElement.style.width = `${progress / 500 * 100}%`;
+                    energyElement.innerText = `${progress}/500`;
+
+                    localStorage.setItem('balance', balance);
+                    localStorage.setItem('progress', progress);
                 }
-
-                balanceElement.innerText = balance;
-                progressElement.style.width = `${progress / 500 * 100}%`;
-
-                localStorage.setItem('balance', balance);
-                localStorage.setItem('progress', progress);
             });
 
             // Prevent double tap zoom
             document.addEventListener('dblclick', (e) => {
                 e.preventDefault();
+            });
+
+            // Open new window on button click
+            const buttons = document.querySelectorAll('.button');
+            buttons.forEach(button => {
+                button.addEventListener('click', () => {
+                    window.open('https://example.com', '_blank');
+                });
             });
         });
     </script>
