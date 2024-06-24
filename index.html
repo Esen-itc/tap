@@ -19,35 +19,90 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: space-between;
+            height: 100%;
+        }
+        #header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 10px;
+            background-color: #1a1d23;
+        }
+        #score {
+            font-size: 24px;
         }
         #tapButton {
             padding: 20px;
             font-size: 24px;
             border: none;
-            border-radius: 10px;
+            border-radius: 50%;
             background-color: #61dafb;
             cursor: pointer;
+            transition: transform 0.1s;
         }
-        #score {
-            margin-top: 20px;
-            font-size: 24px;
+        #tapButton:active {
+            transform: scale(0.9);
+        }
+        #footer {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            padding: 10px;
+            background-color: #1a1d23;
+        }
+        .footer-button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: white;
+        }
+        .footer-button img {
+            width: 32px;
+            height: 32px;
         }
     </style>
 </head>
 <body>
     <div id="game">
+        <div id="header">
+            <div id="score">3 428</div>
+            <div>Bronze</div>
+        </div>
         <button id="tapButton">Tap me!</button>
-        <div id="score">Score: 0</div>
+        <div id="footer">
+            <div class="footer-button">
+                <img src="ref_icon.png" alt="Ref">
+                <div>Ref</div>
+            </div>
+            <div class="footer-button">
+                <img src="task_icon.png" alt="Task">
+                <div>Task</div>
+            </div>
+            <div class="footer-button">
+                <img src="tap_icon.png" alt="Tap">
+                <div>Tap</div>
+            </div>
+            <div class="footer-button">
+                <img src="boost_icon.png" alt="Boost">
+                <div>Boost</div>
+            </div>
+            <div class="footer-button">
+                <img src="stats_icon.png" alt="Stats">
+                <div>Stats</div>
+            </div>
+        </div>
     </div>
 
     <script>
-        let score = 0;
+        let score = 3428;
         const tapButton = document.getElementById('tapButton');
         const scoreDisplay = document.getElementById('score');
 
         tapButton.addEventListener('click', () => {
             score++;
-            scoreDisplay.textContent = `Score: ${score}`;
+            scoreDisplay.textContent = score;
         });
     </script>
 </body>
