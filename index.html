@@ -14,24 +14,29 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            overflow: hidden;
         }
 
         .container {
             text-align: center;
-            width: 100%;
-            height: 100%;
+            width: 350px;
             padding: 20px;
             background: #3b3b98;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
             border-radius: 10px;
         }
 
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .main {
+            margin-top: 20px;
+        }
+
         .balance {
-            font-size: 24px;
+            font-size: 28px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -39,27 +44,17 @@
 
         .coin {
             margin-right: 10px;
-            cursor: pointer;
-            transition: transform 0.1s ease;
-        }
-
-        .coin:active {
-            transform: scale(0.9);
+            font-size: 28px;
         }
 
         .bronze {
             margin-left: 10px;
+            font-size: 20px;
         }
 
         .coin-icon {
-            font-size: 100px;
+            font-size: 120px;
             margin: 20px 0;
-            cursor: pointer;
-            transition: transform 0.1s ease;
-        }
-
-        .coin-icon:active {
-            transform: scale(0.9);
         }
 
         .progress-bar {
@@ -67,8 +62,7 @@
             border-radius: 10px;
             overflow: hidden;
             position: relative;
-            height: 20px;
-            width: 80%;
+            height: 25px;
             margin: 20px 0;
         }
 
@@ -82,88 +76,98 @@
             width: 100%;
             text-align: center;
             top: 0;
+            font-size: 18px;
         }
 
         .buttons {
             display: flex;
             justify-content: space-around;
-            width: 80%;
         }
 
         .button {
             background: #575fcf;
             border: none;
             color: white;
-            padding: 10px;
+            padding: 15px;
             border-radius: 5px;
             cursor: pointer;
-            flex-grow: 1;
-            margin: 0 5px;
+            font-size: 18px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="balance">
-            <span class="coin">🪙</span>
-            <span id="balance">0</span>
-            <span class="bronze">Bronze</span>
+        <div class="header">
+            <div class="time">22:54</div>
+            <div class="telegram">Telegram</div>
+            <div class="signal">4G</div>
         </div>
-        <div class="coin-icon" id="coin-icon">🪙</div>
-        <div class="progress-bar">
-            <div class="progress" id="progress" style="width: 0;"></div>
-            <div class="energy" id="energy">500/500</div>
-        </div>
-        <div class="buttons">
-            <button class="button" id="ref">Ref</button>
-            <button class="button" id="task">Task</button>
-            <button class="button" id="tap">Tap</button>
-            <button class="button" id="boost">Boost</button>
-            <button class="button" id="stats">Stats</button>
+        <div class="main">
+            <div class="balance">
+                <span class="coin">🪙</span>
+                <span id="balance">0</span>
+                <span class="bronze">Bronze</span>
+            </div>
+            <div class="coin-icon">🪙</div>
+            <div class="progress-bar">
+                <div class="progress" id="progress" style="width: 0;"></div>
+                <div class="energy">441/500</div>
+            </div>
+            <div class="buttons">
+                <button class="button" id="ref">Ref</button>
+                <button class="button" id="task" onclick="openTaskWindow()">Task</button>
+                <button class="button" id="tap">Tap</button>
+                <button class="button" id="boost">Boost</button>
+                <button class="button" id="stats">Stats</button>
+            </div>
         </div>
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const balanceElement = document.getElementById('balance');
             const progressElement = document.getElementById('progress');
-            const energyElement = document.getElementById('energy');
-            const coinIcon = document.getElementById('coin-icon');
 
             // Initialize balance and progress from localStorage if available
             let balance = localStorage.getItem('balance') ? parseInt(localStorage.getItem('balance')) : 0;
-            let progress = localStorage.getItem('progress') ? parseInt(localStorage.getItem('progress')) : 500;
+            let progress = localStorage.getItem('progress') ? parseInt(localStorage.getItem('progress')) : 0;
 
             balanceElement.innerText = balance;
             progressElement.style.width = `${progress / 500 * 100}%`;
-            energyElement.innerText = `${progress}/500`;
 
-            coinIcon.addEventListener('click', () => {
-                if (progress > 0) {
-                    balance += 1;
-                    progress -= 1;
+            document.getElementById('tap').addEventListener('click', () => {
+                balance += 1;
+                progress += 1;
 
-                    balanceElement.innerText = balance;
-                    progressElement.style.width = `${progress / 500 * 100}%`;
-                    energyElement.innerText = `${progress}/500`;
-
-                    localStorage.setItem('balance', balance);
-                    localStorage.setItem('progress', progress);
+                if (progress > 500) {
+                    progress = 0;
                 }
+
+                balanceElement.innerText = balance;
+                progressElement.style.width = `${progress / 500 * 100}%`;
+
+                localStorage.setItem('balance', balance);
+                localStorage.setItem('progress', progress);
             });
+
+            // Increment progress bar by 5 every second
+            setInterval(() => {
+                progress += 5;
+                if (progress > 500) {
+                    progress = 0;
+                }
+                progressElement.style.width = `${progress / 500 * 100}%`;
+                localStorage.setItem('progress', progress);
+            }, 1000);
 
             // Prevent double tap zoom
             document.addEventListener('dblclick', (e) => {
                 e.preventDefault();
             });
-
-            // Open new window on button click
-            const buttons = document.querySelectorAll('.button');
-            buttons.forEach(button => {
-                button.addEventListener('click', () => {
-                    window.open('https://example.com', '_blank');
-                });
-            });
         });
+
+        function openTaskWindow() {
+            window.open('task.html', '_blank');
+        }
     </script>
 </body>
 </html>
