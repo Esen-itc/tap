@@ -151,7 +151,19 @@
                 }
             });
 
+            // Prevent double tap zoom
+            document.addEventListener('dblclick', (e) => {
+                e.preventDefault();
+            });
 
+            // Open new window on button click
+            const buttons = document.querySelectorAll('.button');
+            buttons.forEach(button => {
+                button.addEventListener('click', () => {
+                    window.open('https://example.com', '_blank');
+                });
+            });
+        });
     </script>
 </body>
 </html>
