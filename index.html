@@ -11,7 +11,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #282c34;
+            background: linear-gradient(135deg, #1c1e24 0%, #2c2e35 100%);
             color: white;
             font-family: Arial, sans-serif;
         }
@@ -21,6 +21,8 @@
             align-items: center;
             justify-content: space-between;
             height: 100%;
+            width: 100%;
+            max-width: 500px;
         }
         #header {
             display: flex;
@@ -28,10 +30,10 @@
             justify-content: space-between;
             width: 100%;
             padding: 10px;
-            background-color: #1a1d23;
+            background-color: rgba(0, 0, 0, 0.5);
         }
         #score {
-            font-size: 24px;
+            font-size: 36px;
         }
         #tapButton {
             padding: 20px;
@@ -40,17 +42,18 @@
             border-radius: 50%;
             background-color: #61dafb;
             cursor: pointer;
-            transition: transform 0.1s;
+            transition: transform 0.1s, background-color 0.2s;
         }
         #tapButton:active {
-            transform: scale(0.9);
+            transform: scale(0.95);
+            background-color: #21a1f1;
         }
         #footer {
             display: flex;
             justify-content: space-around;
             width: 100%;
             padding: 10px;
-            background-color: #1a1d23;
+            background-color: rgba(0, 0, 0, 0.5);
         }
         .footer-button {
             display: flex;
@@ -61,13 +64,21 @@
         .footer-button img {
             width: 32px;
             height: 32px;
+            margin-bottom: 5px;
+            transition: transform 0.2s;
+        }
+        .footer-button img:active {
+            transform: scale(0.9);
+        }
+        .footer-button div {
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
     <div id="game">
         <div id="header">
-            <div id="score">3 428</div>
+            <div id="score">3 430</div>
             <div>Bronze</div>
         </div>
         <button id="tapButton">Tap me!</button>
@@ -96,7 +107,7 @@
     </div>
 
     <script>
-        let score = 3428;
+        let score = 3430;
         const tapButton = document.getElementById('tapButton');
         const scoreDisplay = document.getElementById('score');
 
@@ -104,6 +115,10 @@
             score++;
             scoreDisplay.textContent = score;
         });
+
+        tapButton.addEventListener('dblclick', (e) => {
+            e.preventDefault();
+        }, false);
     </script>
 </body>
 </html>
